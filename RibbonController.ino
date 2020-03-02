@@ -24,7 +24,7 @@ const int ribbon_min_val = 16; //for my ribbon on my Arduino UNO
 float R_pullup_A3_kOhm = 0.0;  //computed in setup()
 float R_ribbon_min_kOhm = 0.0; //computed in setup()
 const float R_ribbon_max_kOhm = 17.45; //for my ribbon, measured via multi-meter
-const float ribbon_span_half_steps_float = 24;  //how many half-steps do I want my ribbon to represent
+const float ribbon_span_half_steps_float = 36;  //how many half-steps do I want my ribbon to represent
 const float ribbon_span_extra_half_steps_float = 0.5; //twiddle factor
 
 //what note do you want the bottom of the ribbon to represent?
@@ -186,6 +186,10 @@ void Aftertouch(int aftertouch) {
   Serial.write((byte)aftertouch);
   }
 }
+void AftertouchZero(void) {
+  Serial.write((byte)CHANNEL_PRESSURE);
+  Serial.write((byte)0);
+}
 
 void transmitPitchBend(void) {
     Serial.write((byte)PITCH_BEND);
@@ -229,6 +233,7 @@ if (note_change) { //has a note turned on/off or changed value?
   
       //remove the pitch bend command
       recenterMidiPitchBend();
+      AftertouchZero();
     }
   } else {
     //we're not changing note number...but we should still update the pitch bend info
